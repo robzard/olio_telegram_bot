@@ -39,12 +39,20 @@ async def set_commands(bot: Bot):
     await bot.set_my_commands(commands)
 
 
+async def on_startup():
+    await bot.send_message(chat_id=601610220, text='Я запустился')
+
+
+async def on_shutdown():
+    await bot.send_message(chat_id=601610220, text='Я остановился')
+
+
 async def main():
     # Создание таблиц БД, если это необходимо
-    await create_tables()
-    await add_excel_to_db('Меню Олио.xlsx', 'Меню', start_row=3, inline_category='menu')
-    await add_excel_to_db('коктейли.xlsx', 'Original', inline_category='original')
-    await add_excel_to_db('коктейли.xlsx', 'Classic', inline_category='classic')
+    # await create_tables()
+    # await add_excel_to_db('Меню Олио.xlsx', 'Меню', start_row=3, inline_category='menu')
+    # await add_excel_to_db('коктейли.xlsx', 'Original', inline_category='original')
+    # await add_excel_to_db('коктейли.xlsx', 'Classic', inline_category='classic')
 
     # Настройка команд бота
     await set_commands(bot)
@@ -54,6 +62,10 @@ async def main():
     dp.include_router(router_callback_query)
     dp.include_router(router_inline_query)
     dp.include_router(router_messages)
+
+    dp.startup.register(on_startup)
+    dp.shutdown.register(on_shutdown)
+
     await dp.start_polling(bot, skip_updates=True)
 
 
