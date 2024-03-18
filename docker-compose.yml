@@ -1,0 +1,27 @@
+version: '2.4'
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: olio_telegram_bot
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    cpus: "0.5"
+    ports:
+      - "5432:5432"
+
+  bot:
+    build: .
+    command: python bot.py
+    restart: always
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - postgres
+    cpus: "0.5"
+
+volumes:
+  postgres_data:
