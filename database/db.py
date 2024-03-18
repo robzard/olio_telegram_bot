@@ -54,11 +54,14 @@ async def create_tables():
         await conn.run_sync(Base.metadata.create_all)
 
 
-async def get_all_users():
+async def get_all_users(admins=False):
     async_session = await get_async_session()
     async with async_session() as session:
         # Создание базового запроса
-        query = select(User)
+        if admins:
+            query = select(User).where(User.is_admin == '1')
+        else:
+            query = select(User)
         result = await session.execute(query)
         users = result.scalars().all()
         return users

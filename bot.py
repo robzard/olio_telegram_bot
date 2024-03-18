@@ -6,7 +6,7 @@ from aiogram.types import BotCommand, Update, Message
 import os
 from dotenv import load_dotenv
 
-from database.db import create_tables, add_excel_to_db
+from database.db import create_tables, add_excel_to_db, get_all_users, User
 from handlers.callbacks import router_callback_query
 from handlers.commands import start, servicebook, router_commands
 from handlers.inline_mode import router_inline_query
@@ -34,17 +34,22 @@ async def set_commands(bot: Bot):
     commands = [
         BotCommand(command="start", description="Список команд"),
         BotCommand(command="servicebook", description="Service Book"),
-        BotCommand(command="search_menu_bar", description="Поиск меню")
+        BotCommand(command="search_menu_bar", description="Поиск меню"),
+        BotCommand(command="forward_message", description="Переслать сообщение всем")
     ]
     await bot.set_my_commands(commands)
 
 
 async def on_startup():
-    await bot.send_message(chat_id=601610220, text='Я запустился')
+    users: [User] = await get_all_users(admins=True)
+    for user in users:
+        await bot.send_message(chat_id=user.id, text='Я запустился')
 
 
 async def on_shutdown():
-    await bot.send_message(chat_id=601610220, text='Я остановился')
+    users: [User] = await get_all_users(admins=True)
+    for user in users:
+        await bot.send_message(chat_id=user.id, text='Я остановился')
 
 
 async def main():
