@@ -54,10 +54,10 @@ async def on_shutdown():
 
 async def main():
     # Создание таблиц БД, если это необходимо
-    # await create_tables()
-    # await add_excel_to_db('Меню Олио.xlsx', 'Меню', start_row=3, inline_category='menu')
-    # await add_excel_to_db('коктейли.xlsx', 'Original', inline_category='original')
-    # await add_excel_to_db('коктейли.xlsx', 'Classic', inline_category='classic')
+    await create_tables()
+    await add_excel_to_db('Меню Олио.xlsx', 'Меню', start_row=3, inline_category='menu')
+    await add_excel_to_db('коктейли.xlsx', 'Original', inline_category='original')
+    await add_excel_to_db('коктейли.xlsx', 'Classic', inline_category='classic')
 
     # Настройка команд бота
     await set_commands(bot)
