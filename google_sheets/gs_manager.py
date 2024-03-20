@@ -35,26 +35,25 @@ def get_wsh(wsh_name: str):
         with open("./google_sheets/token.json", "w") as token:
             token.write(creds.to_json())
 
-    try:
-        service = build("sheets", "v4", credentials=creds)
 
-        # Call the Sheets API to fetch the last row and column
-        sheet = service.spreadsheets()
-        result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID, range=wsh_name).execute()
-        values = result.get("values", [])
+    service = build("sheets", "v4", credentials=creds)
 
-        if not values:
-            print("No data found.")
-            return
+    # Call the Sheets API to fetch the last row and column
+    sheet = service.spreadsheets()
+    result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID, range=wsh_name).execute()
+    values = result.get("values", [])
 
-        len_columns = len(values[0])
-        for v in values[1:]:
-            count_not_columns = len_columns - len(v)
-            if count_not_columns > 0:
-                for i in range(0, count_not_columns):
-                    v.append('')
+    if not values:
+        print("No data found.")
+        return
 
-        return values
-    except HttpError as err:
-        print(err)
+    len_columns = len(values[0])
+    for v in values[1:]:
+        count_not_columns = len_columns - len(v)
+        if count_not_columns > 0:
+            for i in range(0, count_not_columns):
+                v.append('')
+
+    return values
+
 
