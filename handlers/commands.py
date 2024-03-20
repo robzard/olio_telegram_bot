@@ -66,6 +66,7 @@ async def cmd_delete(message: types.Message):
                 await add_excel_to_db('Вино', inline_category='vine')
                 await message.answer(text="Данные обновлены.")
             except Exception as ex:
+                logging.info(f'ex - {str(ex)}')
                 await message.answer(text=f"Произошла ошибка при обновлении, обратитесь к разработчику.:\n{str(ex)}")
     else:
         await message.answer(f'Обновлять данные может только администратор.')
