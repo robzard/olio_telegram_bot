@@ -1,3 +1,4 @@
+import asyncio
 import logging
 
 from sqlalchemy import create_engine, Column, Integer, String, MetaData, LargeBinary, Boolean
@@ -146,3 +147,4 @@ async def add_excel_to_db(wsh_name: str, inline_category: str):
 
         await session.commit()
         logging.info(f'{wsh_name} обновлено')
+    await asyncio.sleep(1)
