@@ -1,4 +1,4 @@
-from aiogram import types, Router
+from aiogram import types, Router, Bot
 from aiogram.types import InlineQueryResultArticle, InputTextMessageContent, CallbackQuery
 
 from keyboards.inline import kb_search_menu_vine, kb_search_menu_bar
@@ -19,10 +19,16 @@ bar_data = [
 
 
 @router_callback_query.callback_query(lambda c: c.data == 'vine')
-async def handle_menu_bar_query(query: types.CallbackQuery):
-    await query.message.edit_reply_markup(reply_markup=kb_search_menu_vine())
+async def handle_menu_bar_query(query: types.CallbackQuery, bot: Bot):
+    if query.message:
+        await query.message.edit_reply_markup(reply_markup=kb_search_menu_vine())
+    else:
+        await bot.edit_message_reply_markup(inline_message_id=query.inline_message_id, reply_markup=kb_search_menu_vine())
 
 
 @router_callback_query.callback_query(lambda c: c.data == 'vine_back')
-async def handle_menu_bar_query(query: types.CallbackQuery):
-    await query.message.edit_reply_markup(reply_markup=kb_search_menu_bar())
+async def handle_menu_bar_query(query: types.CallbackQuery, bot: Bot):
+    if query.message:
+        await query.message.edit_reply_markup(reply_markup=kb_search_menu_bar())
+    else:
+        await bot.edit_message_reply_markup(inline_message_id=query.inline_message_id, reply_markup=kb_search_menu_bar())
