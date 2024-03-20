@@ -21,7 +21,7 @@ services:
       - .:/usr/src/app
     depends_on:
       - postgres
-    cpus: "1"
+    cpus: "0.5"
     mem_limit: 300m
 
 volumes:
