@@ -14,7 +14,17 @@ from handlers.messages import router_messages
 from middlewares.middlewares import DBMiddleware
 import logging
 
-logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
+# logger = logging.getLogger(__name__)
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("bot.log"),  # Запись логов в файл bot.log
+        logging.StreamHandler()  # Вывод логов в стандартный поток вывода (обычно консоль)
+    ]
+)
 logger = logging.getLogger(__name__)
 
 load_dotenv()
