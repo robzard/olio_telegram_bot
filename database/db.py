@@ -148,4 +148,3 @@ async def add_excel_to_db(wsh_name: str, inline_category: str):
         logging.info(f'Комиичу в БД')
         await session.commit()
         logging.info(f'{wsh_name} обновлено')
-    await asyncio.sleep(1)
