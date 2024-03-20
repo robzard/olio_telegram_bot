@@ -22,6 +22,7 @@ services:
     depends_on:
       - postgres
     cpus: "1"
+    mem_limit: 300m
 
 volumes:
   postgres_data:
