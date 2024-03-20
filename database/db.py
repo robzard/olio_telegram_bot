@@ -1,3 +1,5 @@
+import logging
+
 from sqlalchemy import create_engine, Column, Integer, String, MetaData, LargeBinary, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -128,6 +130,7 @@ async def get_positions_from_db(inline_category: str = None):
 
 
 async def add_excel_to_db(wsh_name: str, inline_category: str):
+    logging.info(f'Обновляю {wsh_name}')
     wsh_values = get_wsh(wsh_name)
     async_session = await get_async_session()
     async with async_session() as session:
@@ -142,3 +145,4 @@ async def add_excel_to_db(wsh_name: str, inline_category: str):
             session.add(menu_object)
 
         await session.commit()
+        logging.info(f'{wsh_name} обновлено')

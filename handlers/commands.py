@@ -1,3 +1,5 @@
+import logging
+
 from aiogram import types, Router
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
@@ -55,8 +57,10 @@ async def cmd_delete(message: types.Message):
         async_session = await get_async_session()
         async with async_session() as session:
             try:
+                logging.info('Удаляю данные')
                 await session.execute(delete(MenuObject))
                 await session.commit()
+                logging.info('Данные удалены')
                 await add_excel_to_db('Меню', inline_category='menu')
                 await add_excel_to_db('Бар', inline_category='bar')
                 await add_excel_to_db('Вино', inline_category='vine')
