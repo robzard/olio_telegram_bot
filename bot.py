@@ -67,7 +67,7 @@ async def main():
     # Создание таблиц БД, если это необходимо
     await create_tables()
     # await add_excel_to_db('Меню', inline_category='menu')
-    # await add_excel_to_db('Бар',  inline_category='bar')
+    await add_excel_to_db('Бар',  inline_category='bar')
     # await add_excel_to_db('Вино',  inline_category='vine')
 
     # Настройка команд бота
