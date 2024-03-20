@@ -61,8 +61,8 @@ async def cmd_delete(message: types.Message):
                 await session.execute(delete(MenuObject))
                 await session.commit()
                 logging.info('Данные удалены')
-                await add_excel_to_db('Меню', inline_category='menu')
-                await add_excel_to_db('Бар', inline_category='bar')
+                # await add_excel_to_db('Меню', inline_category='menu')
+                # await add_excel_to_db('Бар', inline_category='bar')
                 await add_excel_to_db('Вино', inline_category='vine')
                 await message.answer(text="Данные обновлены.")
             except Exception as ex:
