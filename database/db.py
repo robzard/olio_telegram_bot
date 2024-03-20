@@ -133,6 +133,7 @@ async def get_positions_from_db(inline_category: str = None):
 async def add_excel_to_db(wsh_name: str, inline_category: str):
     logging.info(f'Обновляю {wsh_name}')
     wsh_values = get_wsh(wsh_name)
+    logging.info(f'wsh_values - {len(wsh_values)}')
     async_session = await get_async_session()
     async with async_session() as session:
         for row in wsh_values[1:]:  # Пропускаем заголовок
@@ -140,11 +141,11 @@ async def add_excel_to_db(wsh_name: str, inline_category: str):
 
             if name is None or category is None:
                 continue
-
+            logging.info(f'Добавляю в БД - {name}')
             # Добавьте photo_file_id как аргумент при создании экземпляра Drink
             menu_object = MenuObject(name=name, composition=composition, preparation=preparation, history=history, category=category, photo_url=photo_url if photo_url else None, inline_category=inline_category, city=city, price=price)
             session.add(menu_object)
-
+        logging.info(f'Комиичу в БД')
         await session.commit()
         logging.info(f'{wsh_name} обновлено')
     await asyncio.sleep(1)
