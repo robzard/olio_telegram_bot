@@ -19,7 +19,6 @@ services:
 #    restart: always
     volumes:
       - .:/usr/src/app
-      - /var/log/mybot:/usr/src/app # Это добавленный том
     depends_on:
       - postgres
     cpus: "1"

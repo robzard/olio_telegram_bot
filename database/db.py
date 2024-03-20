@@ -132,7 +132,10 @@ async def get_positions_from_db(inline_category: str = None):
 
 async def add_excel_to_db(wsh_name: str, inline_category: str):
     logging.info(f'Обновляю {wsh_name}')
-    wsh_values = get_wsh(wsh_name)
+    try:
+        wsh_values = get_wsh(wsh_name)
+    except Exception as ex:
+        logging.info(f'ERR {str(ex)}')
     logging.info(f'wsh_values - {len(wsh_values)}')
     async_session = await get_async_session()
     async with async_session() as session:
