@@ -11,8 +11,8 @@ services:
       - postgres_data:/var/lib/postgresql/data
     cpus: "0.2"
     mem_limit: 400m
-#    ports:
-#      - "5432:5432"
+    ports:
+      - "5432:5432"
 
   bot:
     build: .
