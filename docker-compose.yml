@@ -21,7 +21,7 @@ services:
       - .:/usr/src/app
     depends_on:
       - postgres
-    cpus: "0.5"
+    cpus: "1"
 
 volumes:
   postgres_data:
