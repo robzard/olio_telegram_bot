@@ -9,7 +9,8 @@ services:
     restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    cpus: "0.5"
+    cpus: "0.2"
+    mem_limit: 400m
 #    ports:
 #      - "5432:5432"
 
@@ -21,8 +22,8 @@ services:
       - .:/usr/src/app
     depends_on:
       - postgres
-    cpus: "1"
-    mem_limit: 500m
+    cpus: "0.8"
+    mem_limit: 600m
 
 volumes:
   postgres_data:
