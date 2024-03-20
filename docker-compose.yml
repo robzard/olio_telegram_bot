@@ -22,7 +22,7 @@ services:
       - /var/log/mybot:/usr/src/app/logs # Это добавленный том
     depends_on:
       - postgres
-    cpus: "2"
+    cpus: "1"
     mem_limit: 500m
 
 volumes:
