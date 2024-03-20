@@ -2,7 +2,7 @@ from aiogram import types, Router
 from aiogram.types import InlineQueryResultArticle, InputTextMessageContent, InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultPhoto, InlineQueryResultCachedPhoto
 import re
 
-from database.db import get_positions_from_db, search_drinks
+from database.db import get_positions_from_db, search_menu_objects
 from keyboards.inline import kb_search_menu_bar
 from static.utils import format_message_text
 
@@ -130,9 +130,9 @@ async def inline_query_handler(inline_query: types.InlineQuery):
     items = await get_positions_from_db(query.strip())
 
     # Фильтрация элементов по тексту в описании
-    query_words = query.replace("menu", "").replace("all", "").replace("original", "").strip().replace("classic", "").strip().split()
+    query_words = query.replace("menu", "").replace("all", "").replace("bar", "").strip().replace("vine", "").strip().split()
     if query_words:
-        items = await search_drinks(query_words, inline_category=inline_category)
+        items = await search_menu_objects(query_words, inline_category=inline_category)
 
     items_to_show = items[offset:offset+50]  # Показываем следующие 50 элементов на основе offset
 

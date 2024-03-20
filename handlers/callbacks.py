@@ -1,6 +1,8 @@
 from aiogram import types, Router
 from aiogram.types import InlineQueryResultArticle, InputTextMessageContent, CallbackQuery
 
+from keyboards.inline import kb_search_menu_vine, kb_search_menu_bar
+
 router_callback_query = Router()
 
 menu_data = [
@@ -16,16 +18,11 @@ bar_data = [
 ]
 
 
-@router_callback_query.callback_query(lambda c: c.data == 'menu')
+@router_callback_query.callback_query(lambda c: c.data == 'vine')
 async def handle_menu_bar_query(query: types.CallbackQuery):
-    text = ""
-    if query.data == "menu":
-        text += "Список меню:\n"
-        for item in menu_data:
-            text += f"{item['name']}: {item['description']}\n"
-    elif query.data == "bar":
-        text += "Список напитков бара:\n"
-        for item in bar_data:
-            text += f"{item['name']}: {item['description']}\n"
+    await query.message.edit_reply_markup(reply_markup=kb_search_menu_vine())
 
-    await query.answer(text=text, show_alert=True)
+
+@router_callback_query.callback_query(lambda c: c.data == 'vine_back')
+async def handle_menu_bar_query(query: types.CallbackQuery):
+    await query.message.edit_reply_markup(reply_markup=kb_search_menu_bar())

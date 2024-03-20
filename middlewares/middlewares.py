@@ -1,13 +1,9 @@
-import os
-from io import BytesIO
 from typing import Callable, Dict, Any
 
-from aiogram import types, Dispatcher, BaseMiddleware, Bot
-from aiogram.types import Update, Message, InputFile, InputMediaPhoto, FSInputFile
+from aiogram import types, BaseMiddleware
+from aiogram.types import Update
 
-from database.db import User, get_async_session, Drink, add_excel_to_db
-
-import asyncio
+from database.db import User, get_async_session
 
 
 async def registration_user(message: types.Message, data: dict):

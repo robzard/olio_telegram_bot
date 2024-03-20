@@ -2,8 +2,9 @@ from aiogram import types, Router
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 from aiogram.utils.keyboard import InlineKeyboardBuilder
+from sqlalchemy import delete
 
-from database.db import get_all_users, User
+from database.db import get_all_users, User, get_async_session, MenuObject, add_excel_to_db
 from keyboards.inline import servicebook_keyboard, kb_search_menu_bar
 from messages_text.txt import txt
 
@@ -37,11 +38,30 @@ async def gpt_question(message: types.Message):
         users = await get_all_users()
         for user in users:
             try:
-                if user.id != message.chat.id:
-                    await message.reply_to_message.forward(chat_id=user.id)
-                    i+=1
+                if user.id == message.chat.id:
+                    await message.reply_to_message.send_copy(chat_id=user.id)
+                    i += 1
             except Exception as e:
                 print(f"Error forwarding message to {user.id}: {e}")
         await message.answer(f'Сообщение отправлено.\nКоличество пользователей, кому было отправлено сообщение: {i}')
     else:
         await message.answer(f'Сообщения может отправлять только администратор.')
+
+
+@router_commands.message(Command('refresh_menu'))
+async def cmd_delete(message: types.Message):
+    admins: [User] = await get_all_users(admins=True)
+    if message.chat.id in [admin.id for admin in admins]:
+        async_session = await get_async_session()
+        async with async_session() as session:
+            try:
+                await session.execute(delete(MenuObject))
+                await session.commit()
+                await add_excel_to_db('Меню', inline_category='menu')
+                await add_excel_to_db('Бар', inline_category='bar')
+                await add_excel_to_db('Вино', inline_category='vine')
+                await message.answer(text="Данные обновлены.")
+            except Exception as ex:
+                await message.answer(text=f"Произошла ошибка при обновлении, обратитесь к разработчику.:\n{str(ex)}")
+    else:
+        await message.answer(f'Обновлять данные может только администратор.')

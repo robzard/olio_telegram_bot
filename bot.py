@@ -35,7 +35,8 @@ async def set_commands(bot: Bot):
         BotCommand(command="start", description="Список команд"),
         BotCommand(command="servicebook", description="Service Book"),
         BotCommand(command="search_menu_bar", description="Поиск меню"),
-        BotCommand(command="forward_message", description="Переслать сообщение всем")
+        BotCommand(command="forward_message", description="[admin] Переслать сообщение всем"),
+        BotCommand(command="refresh_menu", description="[admin] Обновить данные меню")
     ]
     await bot.set_my_commands(commands)
 
@@ -54,10 +55,10 @@ async def on_shutdown():
 
 async def main():
     # Создание таблиц БД, если это необходимо
-    # await create_tables()
-    # await add_excel_to_db('Меню Олио.xlsx', 'Меню', start_row=3, inline_category='menu')
-    # await add_excel_to_db('коктейли.xlsx', 'Original', inline_category='original')
-    # await add_excel_to_db('коктейли.xlsx', 'Classic', inline_category='classic')
+    await create_tables()
+    # await add_excel_to_db('Меню', inline_category='menu')
+    # await add_excel_to_db('Бар',  inline_category='bar')
+    # await add_excel_to_db('Вино',  inline_category='vine')
 
     # Настройка команд бота
     await set_commands(bot)

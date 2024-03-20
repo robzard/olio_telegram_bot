@@ -18,8 +18,22 @@ def servicebook_keyboard() -> InlineKeyboardBuilder:
 def kb_search_menu_bar() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     builder.button(text="Меню", switch_inline_query_current_chat="menu ")
-    builder.button(text="Бар Original", switch_inline_query_current_chat="original ")
-    builder.button(text="Бар Classic", switch_inline_query_current_chat="classic ")
+    builder.button(text="Бар", switch_inline_query_current_chat="bar ")
+    builder.button(text="Вино", callback_data='vine')
     builder.button(text="Весь список", switch_inline_query_current_chat="all ")
-    builder.adjust(1,2,1)
+    builder.adjust(1, 2, 1)
+    return builder.as_markup()
+
+
+def kb_search_menu_vine() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    builder.button(text="Красное", switch_inline_query_current_chat="vine Красное вино")
+    builder.button(text="Белое", switch_inline_query_current_chat="vine Белое вино")
+    builder.button(text="Игристое", switch_inline_query_current_chat="vine Игристое вино")
+    builder.button(text="Розовое", switch_inline_query_current_chat="vine Розовое вино")
+    builder.button(text="Оранжевое", switch_inline_query_current_chat="vine Оранжевое вино")
+    builder.button(text="Сладкое", switch_inline_query_current_chat="vine Сладкое вино")
+    builder.button(text="Крепленое", switch_inline_query_current_chat="vine Крепленое вино")
+    builder.button(text="Назад", callback_data='vine_back')
+    builder.adjust(2)
     return builder.as_markup()

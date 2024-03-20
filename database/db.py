@@ -12,6 +12,8 @@ from dotenv import load_dotenv
 
 import os
 
+from google_sheets.gs_manager import get_wsh
+
 load_dotenv()
 
 DATABASE_URL = os.getenv('DATABASE_URL')
@@ -31,17 +33,18 @@ class User(Base):
     is_admin = Column(String)
 
 
-class Drink(Base):
-    __tablename__ = 'drinks'
+class MenuObject(Base):
+    __tablename__ = 'menu'
     id = Column(Integer, primary_key=True)
     name = Column(String)
     composition = Column(String)
     preparation = Column(String)
     history = Column(String)
-    have_photo = Column(Boolean)
     category = Column(String)
     photo_url = Column(String)
     inline_category = Column(String)
+    city = Column(String)
+    price = Column(String)
 
 
 async def get_async_session():
@@ -50,7 +53,7 @@ async def get_async_session():
 
 async def create_tables():
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
+        # await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
 
 
@@ -67,24 +70,24 @@ async def get_all_users(admins=False):
         return users
 
 
-async def search_drinks(query_words: List[str], inline_category: str = None):
+async def search_menu_objects(query_words: List[str], inline_category: str = None):
     async_session = await get_async_session()
     async with async_session() as session:
         # Создание базового запроса
         if inline_category == 'all':
-            query = select(Drink)
+            query = select(MenuObject)
         else:
-            query = select(Drink).where(Drink.inline_category == inline_category)
+            query = select(MenuObject).where(MenuObject.inline_category == inline_category)
 
         # Добавление условий поиска по ключевым словам, если они есть
         if query_words:
             conditions_per_word = []
             for word in query_words:
                 word_condition = or_(
-                    Drink.name.ilike(f'%{word}%'),
-                    Drink.composition.ilike(f'%{word}%'),
-                    Drink.category.ilike(f'%{word}%'),
-                    Drink.preparation.ilike(f'%{word}%')
+                    MenuObject.name.ilike(f'%{word}%'),
+                    MenuObject.composition.ilike(f'%{word}%'),
+                    MenuObject.category.ilike(f'%{word}%'),
+                    MenuObject.preparation.ilike(f'%{word}%')
                 )
                 conditions_per_word.append(word_condition)
 
@@ -105,8 +108,8 @@ async def search_drinks(query_words: List[str], inline_category: str = None):
 
         # Выполнение запроса
         result = await session.execute(query)
-        drinks = result.scalars().all()
-        return drinks
+        menu_objects = result.scalars().all()
+        return menu_objects
 
 
 async def get_positions_from_db(inline_category: str = None):
@@ -114,31 +117,28 @@ async def get_positions_from_db(inline_category: str = None):
     async with async_session() as session:
         # Создание запроса
         if inline_category == 'all':
-            query = select(Drink)
+            query = select(MenuObject)
         else:
-            query = select(Drink).where(Drink.inline_category == inline_category)
+            query = select(MenuObject).where(MenuObject.inline_category == inline_category)
 
         # Выполнение запроса
         result = await session.execute(query)
-        drinks = result.scalars().all()
-        return drinks
+        menu_objects = result.scalars().all()
+        return menu_objects
 
 
-async def add_excel_to_db(file_name: str, ws_name: str, inline_category: str, start_row: int = 2):
-    wb = load_workbook(filename=f'./{file_name}', data_only=True)
-    ws: Worksheet = wb[ws_name]
-
-    photo_counter = 0
+async def add_excel_to_db(wsh_name: str, inline_category: str):
+    wsh_values = get_wsh(wsh_name)
     async_session = await get_async_session()
     async with async_session() as session:
-        for row in ws.iter_rows(min_row=start_row, values_only=True):  # Пропускаем заголовок
-            name, composition, preparation, history, _, have_photo, category, photo_url = row[:8]
+        for row in wsh_values[1:]:  # Пропускаем заголовок
+            name, composition, preparation, history, category, photo_url, city, price = row
 
             if name is None or category is None:
                 continue
 
             # Добавьте photo_file_id как аргумент при создании экземпляра Drink
-            drink = Drink(name=name, composition=composition, preparation=preparation, history=history, have_photo=bool(have_photo), category=category, photo_url=photo_url if photo_url else None, inline_category=inline_category)
-            session.add(drink)
+            menu_object = MenuObject(name=name, composition=composition, preparation=preparation, history=history, category=category, photo_url=photo_url if photo_url else None, inline_category=inline_category, city=city, price=price)
+            session.add(menu_object)
 
         await session.commit()

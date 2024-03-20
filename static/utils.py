@@ -1,7 +1,9 @@
 import os
 import zipfile
+from aiogram import types
+from aiogram.types import InputMediaPhoto, InputMediaVideo
 
-from database.db import Drink
+from database.db import MenuObject
 
 
 def save_images():
@@ -21,10 +23,6 @@ def save_images():
                 zip_ref.extract(file_info, extract_folder)
 
 
-# def format_message_text(item: Drink):
-#     f"{item.name}\n{item.composition}\n{item.preparation}\n{item.history}\n[Фото]({item.photo_url})"
-#     text = 'item.name'
-
 def escape_md_v2(text: str) -> str:
     escape_chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!']
     for char in escape_chars:
@@ -33,20 +31,22 @@ def escape_md_v2(text: str) -> str:
 
 
 def format_message_text(item) -> str:
-    name = escape_md_v2(item.name.strip()) if item.name else "Информация отсутствует"
-    composition = escape_md_v2(item.composition.strip()) if item.composition else "Информация отсутствует"
-    preparation = escape_md_v2(item.preparation.strip()) if item.preparation else "Информация отсутствует"
-    history = escape_md_v2(item.history.strip()) if item.history else "Информация отсутствует"
-    photo_url = item.photo_url if item.photo_url else ""
+    message = ""
+    if item.name:
+        message += f"📌 *Название:* \n{escape_md_v2(item.name.strip())}\n\n"
+    if item.price:
+        message += f"💰 *Цена:* \n{escape_md_v2(item.price.strip())}\n\n"
+    if item.city:
+        message += f"🏠 *Место производства:* \n{escape_md_v2(item.city.strip())}\n\n"
+    if item.composition:
+        message += f"📝 *Состав:* \n{escape_md_v2(item.composition.strip())}\n\n"
+    if item.preparation:
+        message += f"🍳 *Приготовление:* \n{escape_md_v2(item.preparation.strip())}\n\n"
+    if item.history:
+        message += f"📖 *История:* \n{escape_md_v2(item.history.strip())}\n\n"
 
-    message = (
-        f"📌 *Название:* {name}\n\n"
-        f"📝 *Состав:* \n{composition}\n\n"
-        f"🍳 *Приготовление:* \n{preparation}\n\n"
-        f"📖 *История:* \n{history}\n\n"
-    )
-
-    if photo_url:
-        message += f"[Фото]({photo_url})"
+    if item.photo_url:
+        message += f"[Фото]({item.photo_url})"
 
     return message
+
