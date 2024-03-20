@@ -10,8 +10,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     cpus: "0.5"
-    ports:
-      - "5432:5432"
+#    ports:
+#      - "5432:5432"
 
   bot:
     build: .
