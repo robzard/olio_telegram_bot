@@ -1,7 +1,7 @@
 import asyncio
 import logging
 
-from sqlalchemy import create_engine, Column, Integer, String, MetaData, LargeBinary, Boolean
+from sqlalchemy import create_engine, Column, Integer, String, MetaData, LargeBinary, Boolean, desc
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, AsyncEngine
@@ -78,7 +78,7 @@ async def search_menu_objects(query_words: List[str], inline_category: str = Non
     async with async_session() as session:
         # Создание базового запроса
         if inline_category == 'all':
-            query = select(MenuObject)
+            query = select(MenuObject).order_by(desc(MenuObject.id))
         else:
             query = select(MenuObject).where(MenuObject.inline_category == inline_category)
 
