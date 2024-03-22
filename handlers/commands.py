@@ -40,11 +40,10 @@ async def gpt_question(message: types.Message):
         users = await get_all_users()
         for user in users:
             try:
-                if user.id == message.chat.id:
-                    await message.reply_to_message.send_copy(chat_id=user.id)
-                    i += 1
+                await message.reply_to_message.send_copy(chat_id=user.id)
+                i += 1
             except Exception as e:
-                print(f"Error forwarding message to {user.id}: {e}")
+                await message.answer(f'Произошла какая-то ошибка при отправлении: {str(e)}')
         await message.answer(f'Сообщение отправлено.\nКоличество пользователей, кому было отправлено сообщение: {i}')
     else:
         await message.answer(f'Сообщения может отправлять только администратор.')
