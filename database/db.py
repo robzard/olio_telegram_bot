@@ -120,7 +120,7 @@ async def get_positions_from_db(inline_category: str = None):
     async with async_session() as session:
         # Создание запроса
         if inline_category == 'all':
-            query = select(MenuObject)
+            query = select(MenuObject).order_by(MenuObject.id,MenuObject.inline_category, MenuObject.category)
         else:
             query = select(MenuObject).where(MenuObject.inline_category == inline_category)
 
