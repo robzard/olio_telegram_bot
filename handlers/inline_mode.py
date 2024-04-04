@@ -153,5 +153,5 @@ async def inline_query_handler(inline_query: types.InlineQuery):
 
     next_offset = str(offset + 50) if len(items) > offset + 50 else ""  # Если есть еще элементы, увеличиваем offset, иначе возвращаем пустую строку
 
-    await inline_query.answer(results=results, cache_time=1, next_offset=next_offset)
+    await inline_query.answer(results=results, cache_time=300, next_offset=next_offset)
 
