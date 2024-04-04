@@ -4,6 +4,7 @@ from aiogram import types, BaseMiddleware
 from aiogram.types import Update
 
 from database.db import User, get_async_session
+from google_sheets.gs_manager import refresh_token
 
 
 async def registration_user(message: types.Message, data: dict):
@@ -21,8 +22,8 @@ async def registration_user(message: types.Message, data: dict):
 class DBMiddleware(BaseMiddleware):
     async def __call__(self, handler: Callable[[Update, Dict[str, Any]], Any], event: Update,
                        data: Dict[str, Any]):
-
         message = event if isinstance(event, types.Message) else None
+        refresh_token()
         if message and message.text and message.text.startswith('/start'):
             await registration_user(message, data)
         return await handler(event, data)
