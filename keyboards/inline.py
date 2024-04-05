@@ -19,6 +19,7 @@ def kb_search_menu_bar() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     builder.button(text="Меню", switch_inline_query_current_chat="menu ")
     builder.button(text="Бар", switch_inline_query_current_chat="bar ")
+    builder.button(text="Крепач", switch_inline_query_current_chat="krepach ")
     builder.button(text="Вино", callback_data='vine')
     builder.button(text="Весь список", switch_inline_query_current_chat="all ")
     builder.adjust(1, 2, 1)

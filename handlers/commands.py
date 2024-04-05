@@ -63,6 +63,7 @@ async def cmd_delete(message: types.Message):
                 await add_excel_to_db('Меню', inline_category='menu')
                 await add_excel_to_db('Бар', inline_category='bar')
                 await add_excel_to_db('Вино', inline_category='vine')
+                await add_excel_to_db('Крепач', inline_category='krepach')
                 await message.answer(text="Данные обновлены.")
             except Exception as ex:
                 logging.info(f'ex - {str(ex)}')
