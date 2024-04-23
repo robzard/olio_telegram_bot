@@ -23,7 +23,7 @@ class DBMiddleware(BaseMiddleware):
     async def __call__(self, handler: Callable[[Update, Dict[str, Any]], Any], event: Update,
                        data: Dict[str, Any]):
         message = event if isinstance(event, types.Message) else None
-        refresh_token()
+        # refresh_token()
         if message and message.text and message.text.startswith('/start'):
             await registration_user(message, data)
         return await handler(event, data)
